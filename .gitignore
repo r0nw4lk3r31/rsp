@@ -1,6 +1,12 @@
 # Android SDK — stored locally inside the project root, never commit
 .android-sdk/
 
+# Signing keystore — contains private key, never commit
+sporen-release.jks
+
+# Local machine config (SDK path, keystore credentials)
+local.properties
+
 # Gradle toolchain JDK download cache
 .tools/
 
