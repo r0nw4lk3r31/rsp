@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Clock ring -->
+    <path
+        android:strokeWidth="4"
+        android:strokeColor="#4A9EFF"
+        android:fillColor="#00000000"
+        android:pathData="M54,54 m-32,0 a32,32 0 1,0 64,0 a32,32 0 1,0 -64,0" />
+
+    <!-- Hour hand (pointing to ~10 o'clock) -->
+    <path
+        android:strokeWidth="3"
+        android:strokeColor="#FFFFFF"
+        android:strokeLineCap="round"
+        android:pathData="M54,54 L38,34" />
+
+    <!-- Minute hand (pointing to 12) -->
+    <path
+        android:strokeWidth="2.5"
+        android:strokeColor="#FFFFFF"
+        android:strokeLineCap="round"
+        android:pathData="M54,54 L54,28" />
+
+    <!-- Second hand (pointing to 3 / right) — blue accent -->
+    <path
+        android:strokeWidth="1.5"
+        android:strokeColor="#4A9EFF"
+        android:strokeLineCap="round"
+        android:pathData="M54,54 L80,54" />
+
+    <!-- Center pivot -->
+    <path
+        android:fillColor="#4A9EFF"
+        android:pathData="M54,54 m-3,0 a3,3 0 1,0 6,0 a3,3 0 1,0 -6,0" />
+
+    <!-- Tick marks (12, 3, 6, 9) -->
+    <path
+        android:strokeWidth="2"
+        android:strokeColor="#4A9EFF"
+        android:pathData="M54,22 L54,26 M86,54 L82,54 M54,86 L54,82 M22,54 L26,54" />
+
+</vector>

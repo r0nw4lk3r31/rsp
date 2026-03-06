@@ -1,0 +1,58 @@
+# Android SDK — stored locally inside the project root, never commit
+.android-sdk/
+
+# Gradle toolchain JDK download cache
+.tools/
+
+# Gradle cache
+.gradle/
+
+# Kotlin daemon / workspace cache
+.kotlin/
+
+# Python venv (used for local tooling)
+.venv/
+
+# Build log
+build.log
+
+# Local database export (user data, not source)
+clocked_export.db
+
+# Build outputs
+*.apk
+*.aab
+*.ap_
+*.dex
+/build/
+app/build/
+
+# Gradle
+.gradle/
+!gradle/wrapper/gradle-wrapper.jar
+!gradlew
+!gradlew.bat
+
+# Local config — contains SDK path, never commit
+local.properties
+
+# IDE — Android Studio / IntelliJ
+.idea/
+*.iml
+*.iws
+*.ipr
+.navigation/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# NDK / CMake
+.externalNativeBuild/
+.cxx/
+
+# Profiling
+/captures/
+
+# Secrets
+google-services.json

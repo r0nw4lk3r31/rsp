@@ -1,0 +1,9 @@
+﻿<resources>
+    <!-- Base application theme — window chrome only; Compose handles everything else -->
+    <style name="Theme.SporenRooster" parent="android:Theme.Material.NoActionBar">
+        <item name="android:statusBarColor">#19AFB1</item>
+        <item name="android:navigationBarColor">#FFFFFF</item>
+        <item name="android:windowBackground">#FFFFFF</item>
+    </style>
+</resources>
+
