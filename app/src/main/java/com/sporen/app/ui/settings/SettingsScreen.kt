@@ -30,6 +30,13 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.Switch
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Modifier
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -38,7 +45,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -55,6 +61,8 @@ fun SettingsScreen(
     val context = LocalContext.current
     var showClearConfirm by remember { mutableStateOf(false) }
     var showLogoutConfirm by remember { mutableStateOf(false) }
+    var showPinSetup by remember { mutableStateOf(false) }
+    var newPin by remember { mutableStateOf("") }
 
     // Fire share sheet when export is ready
     LaunchedEffect(state.exportUri) {
@@ -74,6 +82,44 @@ fun SettingsScreen(
             snackbarHostState.showSnackbar(it)
             viewModel.clearSavedMessage()
         }
+    }
+
+
+    // PIN setup dialog
+    if (showPinSetup) {
+        AlertDialog(
+            onDismissRequest = { showPinSetup = false; newPin = "" },
+            title = { Text("Stel pincode in") },
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text("Kies een 4-cijferige pincode.")
+                    OutlinedTextField(
+                        value = newPin,
+                        onValueChange = { if (it.length <= 4 && it.all(Char::isDigit)) newPin = it },
+                        label = { Text("Pincode") },
+                        singleLine = true,
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
+                        visualTransformation = PasswordVisualTransformation(),
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                }
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        if (newPin.length == 4) {
+                            viewModel.enablePin(newPin)
+                            showPinSetup = false
+                            newPin = ""
+                        }
+                    },
+                    enabled = newPin.length == 4,
+                ) { Text("Opslaan") }
+            },
+            dismissButton = {
+                TextButton(onClick = { showPinSetup = false; newPin = "" }) { Text("Annuleer") }
+            },
+        )
     }
 
     // Confirmation: clear database
@@ -169,6 +215,39 @@ fun SettingsScreen(
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 Text("Opslaan")
+            }
+
+            Spacer(Modifier.height(8.dp))
+            HorizontalDivider()
+            Spacer(Modifier.height(8.dp))
+
+            // ── Beveiliging ───────────────────────────────────────────
+            Text(
+                "Beveiliging",
+                style = MaterialTheme.typography.titleSmall,
+                color = MaterialTheme.colorScheme.primary,
+            )
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+            ) {
+                Column(modifier = Modifier.weight(1f)) {
+                    Text("Vergrendel met pincode", style = MaterialTheme.typography.bodyMedium)
+                    Text(
+                        if (state.pinEnabled) "App vergrendeld bij elke start"
+                        else "Uit — iedereen kan de app openen",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+                Switch(
+                    checked = state.pinEnabled,
+                    onCheckedChange = { enabled ->
+                        if (enabled) showPinSetup = true else viewModel.disablePin()
+                    },
+                )
             }
 
             Spacer(Modifier.height(8.dp))

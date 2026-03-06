@@ -125,6 +125,9 @@ dependencies {
     // Google Sign-In
     implementation(libs.google.play.services.auth)
 
+    // Biometric
+    implementation(libs.androidx.biometric)
+
     // Testing
     testImplementation(libs.junit4)
     testImplementation(libs.kotlinx.coroutines.test)

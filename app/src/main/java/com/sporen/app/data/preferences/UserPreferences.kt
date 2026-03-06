@@ -25,11 +25,15 @@ class UserPreferences @Inject constructor(
         val FULL_NAME = stringPreferencesKey("full_name")
         val ALIAS = stringPreferencesKey("alias")
         val ONBOARDING_COMPLETE = booleanPreferencesKey("onboarding_complete")
+        val PIN_HASH = stringPreferencesKey("pin_hash")
     }
 
     val fullName: Flow<String> = store.data.map { it[Keys.FULL_NAME] ?: "" }
     val alias: Flow<String> = store.data.map { it[Keys.ALIAS] ?: "" }
     val onboardingComplete: Flow<Boolean> = store.data.map { it[Keys.ONBOARDING_COMPLETE] ?: false }
+
+    /** SHA-256 hash of the PIN, empty string means no PIN set. */
+    val pinHash: Flow<String> = store.data.map { it[Keys.PIN_HASH] ?: "" }
 
     suspend fun saveProfile(fullName: String, alias: String) {
         store.edit {
@@ -37,6 +41,14 @@ class UserPreferences @Inject constructor(
             it[Keys.ALIAS] = alias.trim().lowercase()
             it[Keys.ONBOARDING_COMPLETE] = true
         }
+    }
+
+    suspend fun savePinHash(hash: String) {
+        store.edit { it[Keys.PIN_HASH] = hash }
+    }
+
+    suspend fun clearPin() {
+        store.edit { it.remove(Keys.PIN_HASH) }
     }
 
     suspend fun logout() {

@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.sporen.app.data.preferences.UserPreferences
 import com.sporen.app.data.repository.ShiftRepository
 import com.sporen.app.domain.usecase.ExportCsvUseCase
+import com.sporen.app.ui.lock.LockViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -23,6 +24,7 @@ data class SettingsUiState(
     val isExporting: Boolean = false,
     val exportUri: Uri? = null,
     val savedMessage: String? = null,
+    val pinEnabled: Boolean = false,
 )
 
 @HiltViewModel
@@ -46,6 +48,7 @@ class SettingsViewModel @Inject constructor(
             _state.value = _state.value.copy(
                 fullName = prefs.fullName.first(),
                 alias = prefs.alias.first(),
+                pinEnabled = prefs.pinHash.first().isNotEmpty(),
             )
         }
     }
@@ -96,6 +99,20 @@ class SettingsViewModel @Inject constructor(
             repository.clearAll()
             _state.value = _state.value.copy(savedMessage = "Alle shifts verwijderd")
             onDone()
+        }
+    }
+
+    fun enablePin(pin: String) {
+        viewModelScope.launch {
+            prefs.savePinHash(LockViewModel.sha256(pin))
+            _state.value = _state.value.copy(pinEnabled = true, savedMessage = "Pincode ingesteld")
+        }
+    }
+
+    fun disablePin() {
+        viewModelScope.launch {
+            prefs.clearPin()
+            _state.value = _state.value.copy(pinEnabled = false, savedMessage = "Pincode verwijderd")
         }
     }
 
