@@ -80,7 +80,7 @@ android {
             excludes += "META-INF/services/javax.xml.parsers.SAXParserFactory"
             excludes += "META-INF/services/javax.xml.parsers.DocumentBuilderFactory"
             excludes += "META-INF/services/org.apache.xmlbeans.SchemaTypeSystem"
-            excludes += "META-INF/services/org.apache.poi.ss.usermodel.WorkbookProvider"
+            // WorkbookProvider service file must NOT be excluded — WorkbookFactory.create() needs it to detect xlsx format
         }
     }
 }
@@ -132,7 +132,8 @@ dependencies {
         exclude(group = "xml-apis", module = "xml-apis")
     }
     // log4j-api required by POI at runtime (log4j-core excluded — too heavy for Android)
-    implementation("org.apache.logging.log4j:log4j-api:2.20.0")
+    // Must match or exceed what poi-5.2.5 requires (2.21.1+); pinning 2.20.0 causes IOUtils static-init failure
+    implementation("org.apache.logging.log4j:log4j-api:2.23.1")
     // Required stax + XML streaming for OOXML on Android
     implementation("javax.xml.stream:stax-api:1.0-2")
     implementation("com.fasterxml:aalto-xml:1.3.2")

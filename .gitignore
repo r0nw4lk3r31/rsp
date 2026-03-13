@@ -62,3 +62,6 @@ Thumbs.db
 
 # Secrets
 google-services.json
+
+# Planning & strategy docs — private, not part of the versioned codebase
+docs/
